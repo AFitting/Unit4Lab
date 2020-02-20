@@ -8,8 +8,14 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.codepath.android.navigationdrawerexercise.R;
+import com.codepath.android.navigationdrawerexercise.fragments.FamilyGuyFragment;
+import com.codepath.android.navigationdrawerexercise.fragments.FuturamaFragment;
+import com.codepath.android.navigationdrawerexercise.fragments.SimpsonsFragment;
+import com.codepath.android.navigationdrawerexercise.fragments.SouthParkFragment;
 import com.google.android.material.navigation.NavigationView;
 
 
@@ -43,6 +49,12 @@ public class MainActivity extends AppCompatActivity {
 
         // Tie DrawerLayout events to the ActionBarToggle
         mDrawer.addDrawerListener(drawerToggle);
+
+        // Find our drawer view
+        nvDrawer = (NavigationView) findViewById(R.id.nvView);
+
+        // Setup drawer view
+        setupDrawerContent(nvDrawer);
     }
 
     private ActionBarDrawerToggle setupDrawerToggle() {
@@ -79,5 +91,70 @@ public class MainActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    private void setupDrawerContent(NavigationView navigationView) {
+        navigationView.setNavigationItemSelectedListener(
+                new NavigationView.OnNavigationItemSelectedListener() {
+
+                    @Override
+                    public boolean onNavigationItemSelected(MenuItem menuItem) {
+                        selectDrawerItem(menuItem);
+                        return true;
+                    }
+                });
+    }
+
+    public void selectDrawerItem(MenuItem menuItem) {
+
+        // Create a new fragment and specify the fragment to show based on nav item clicked
+        Fragment fragment = null;
+        Class fragmentClass;
+
+        switch(menuItem.getItemId()) {
+
+            case R.id.south_park:
+                fragmentClass = SouthParkFragment.class;
+                break;
+
+            case R.id.family_guy:
+                fragmentClass = FamilyGuyFragment.class;
+                break;
+
+            case R.id.simpsons:
+                fragmentClass = SimpsonsFragment.class;
+                break;
+
+            case R.id.futurama:
+                fragmentClass = FuturamaFragment.class;
+                break;
+
+
+            default:
+                fragmentClass = SouthParkFragment.class;
+        }
+
+
+        try {
+            fragment = (Fragment) fragmentClass.newInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        // Insert the fragment by replacing any existing fragment
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+
+
+
+        // Highlight the selected item has been done by NavigationView
+        menuItem.setChecked(true);
+
+        // Set action bar title
+        setTitle(menuItem.getTitle());
+
+        // Close the navigation drawer
+        mDrawer.closeDrawers();
+    }
+
 
 }

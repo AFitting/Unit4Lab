@@ -3,7 +3,8 @@
     android:layout_height="match_parent"
     android:background="@android:color/black">
 
-    <ImageView
+    <ImageView android:name="com.example.android.fragments.SimpsonsFragment"
+        android:id="@+id/fragment_simpsons"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/simpsons"
