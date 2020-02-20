@@ -127,8 +127,7 @@ public class MainActivity extends AppCompatActivity {
             case R.id.futurama:
                 fragmentClass = FuturamaFragment.class;
                 break;
-
-
+                
             default:
                 fragmentClass = SouthParkFragment.class;
         }
